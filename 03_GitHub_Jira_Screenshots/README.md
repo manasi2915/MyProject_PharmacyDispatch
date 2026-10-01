@@ -58,7 +58,7 @@ A user story opened in detail, showing its description and acceptance criteria.
 
 | File | Description |
 |------|-------------|
-| `Jira_Scrum.pdf` | Scrum project export |
-| `Jira_Kanban.pdf` | Kanban project export |
-| `Jira_Bug_Tracking.pdf` | Bug Tracking project export |
+| `Scrum.pdf` | Scrum project export |
+| `Kanban.pdf` | Kanban project export |
+| `BugReport.pdf` | Bug Tracking project export |
 
