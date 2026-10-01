@@ -4,14 +4,6 @@
 
 ![System Architecture](Architecture_Diagram.png)
 
-## Files
-
-| File | Description |
-|------|-------------|
-| `Architecture_Diagram.png` | System architecture diagram (image) |
-| `Architecture_Diagram.pdf` | Same diagram, print-quality PDF |
-| `Architecture_Diagram.drawio` | Editable source (open at [app.diagrams.net](https://app.diagrams.net)) |
-
 ## Architecture Style
 
 The system follows a **layered architecture**, where each layer only talks to the layer directly below it.
