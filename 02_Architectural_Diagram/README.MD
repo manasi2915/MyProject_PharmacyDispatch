@@ -1,34 +1,40 @@
 # 02 — Architectural Diagram
+## Architecture Selection
 
-**Project:** Pharmacy Expiry & Re-order Dispatch Engine (Problem Statement #15)
+**I chose Layered Architecture for the Pharmacy Expiry & Re-order Dispatch Engine.**
+The full justification (two reasons, security advantage, performance benefit) is in `Architecture_Justification.pdf`.
 
-![System Architecture](Architecture_Diagram.png)
+## Component Diagram
 
-## Architecture Style
+![Component Diagram](Component_Diagram.png)
 
-The system follows a **layered architecture**, where each layer only talks to the layer directly below it.
+## Files
 
-| Layer | Components | Responsibility |
-|-------|------------|----------------|
-| Presentation | Pharmacy Clerk Web UI, Supplier Portal | User interaction for each actor |
-| API | REST API Gateway | Authentication, role-based access, request routing |
-| Business / Service | Batch Registration, Dispensing, FEFO Engine, System Scheduler, Stock Monitor, Purchase Order Service | Core business logic for all use cases |
-| Data Access | Repositories + Audit Logger | Database access; writes an immutable audit record for every change |
-| Data | Inventory DB, Audit Log Store, Purchase Order DB | Persistent storage |
+| File | Description |
+|------|-------------|
+| `Component_Diagram.png` / `.pdf` | UML component diagram with provided (ball) and required (socket) interfaces |
+| `Architecture_Justification.docx` / `.pdf` | One-page architecture justification |
+| `Architecture_Diagram.png` | Supplementary layered overview of the system |
 
-## Key Flows
+## Components (7)
 
-1. **Dispensing (UC-02, FR-001):** Clerk UI → API Gateway → Dispensing Service → FEFO Engine selects the earliest-expiring unexpired batch → stock deducted in Inventory DB → audit record written.
-2. **Automated re-order (UC-05 → UC-06 → UC-07, FR-004, NFR-001):** System Scheduler triggers the Stock Monitor every minute → a threshold breach is passed to the Purchase Order Service → the PO is stored and dispatched to the external Supplier System over HTTPS/TLS.
-3. **Supplier update (UC-08, FR-005):** Supplier Portal → API Gateway → Purchase Order Service updates the PO status and the expected incoming stock.
+| Layer | Component | Responsibility |
+|-------|-----------|----------------|
+| Presentation | Clerk UI | Batch registration, dispensing, picking list screens |
+| Presentation | Supplier Portal | View and update purchase order status |
+| Business | Inventory Manager | Registers batches and dispenses stock (UC-01, UC-02) |
+| Business | FEFO Selector | Ranks unexpired batches by expiry date (UC-03, UC-04) |
+| Business | Stock Monitor | Scheduled safety-threshold checks (UC-05) |
+| Business | Purchase Order Service | Generates, dispatches and updates POs (UC-06 to UC-08) |
+| Data | Database | Inventory, purchase orders, append-only audit log |
 
-## Requirement Traceability
+## Interfaces (6)
 
-| Component | Use Case(s) | Requirement(s) |
-|-----------|-------------|----------------|
-| Batch Registration Service | UC-01 | FR-002 |
-| Dispensing Service | UC-02 | FR-001 |
-| FEFO Engine | UC-03, UC-04 | FR-001, FR-003 |
-| Stock Monitor | UC-05 | FR-004 |
-| Purchase Order Service | UC-06, UC-07, UC-08 | NFR-001, FR-005 |
-| Audit Logger + Audit Log Store | All write operations | NFR-002 |
+| Interface | Provided by | Required by | Type |
+|-----------|-------------|-------------|------|
+| IInventoryService | Inventory Manager | Clerk UI | REST API call |
+| IPOStatus | Purchase Order Service | Supplier Portal | REST API call |
+| IBatchSelection | FEFO Selector | Inventory Manager | Internal method call |
+| IPurchaseOrder | Purchase Order Service | Stock Monitor | Internal call on threshold breach |
+| IDataAccess | Database | Inventory Manager, FEFO Selector, Stock Monitor, Purchase Order Service | SQL queries |
+| ISupplierDispatch | Supplier System (external) | Purchase Order Service | HTTPS / TLS |
