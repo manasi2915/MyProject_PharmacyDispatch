@@ -12,9 +12,8 @@ The full justification (two reasons, security advantage, performance benefit) is
 
 | File | Description |
 |------|-------------|
-| `Component_Diagram.png` / `.pdf` | UML component diagram with provided (ball) and required (socket) interfaces |
-| `Architecture_Justification.docx` / `.pdf` | One-page architecture justification |
-| `Architecture_Diagram.png` | Supplementary layered overview of the system |
+| `Component_Diagram.png` | UML component diagram with provided (ball) and required (socket) interfaces |
+| `Architecture_Justification.pdf` | One-page architecture justificationn
 
 ## Components (7)
 
